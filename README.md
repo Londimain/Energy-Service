@@ -146,11 +146,21 @@ pyinstaller --onefile --windowed --name "Energy" --icon="ico\appEnergy.ico" --ad
 <img width="1920" height="1040" alt="Снимок экрана 2026-08-28 135419" src="https://github.com/user-attachments/assets/bf0b776a-ac5d-4ed2-97a0-f804083b1b40" />
 <img width="1920" height="1040" alt="Снимок экрана 2026-08-28 135443" src="https://github.com/user-attachments/assets/76cec2e1-e295-47c5-866a-9681b4b9a51f" />
 
+👨‍💻 Разработчик
+
+Ильенков Сергей Михайлович
+
+Контакты:
+
+    📧 Email: ismxfactor@gmail.com
+
+    📞 Телефон: +375 (29) 547-39-03
+    
 📄 Лицензия
 
 MIT License
 
-Copyright (c) Londimain 2026 ОАО «Компания MogNat»
+Copyright (c) 2026 Londimain ОАО «Компания MogNat»
 
 Данное программное обеспечение распространяется бесплатно и может быть использовано, скопировано, изменено, объединено, опубликовано, распространено, сублицензировано и/или продано без ограничений.
 
