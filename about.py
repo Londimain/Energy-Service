@@ -9,20 +9,15 @@ from version import VERSION
 class AboutWindow:
     def __init__(self, parent):
         self.top = tk.Toplevel(parent)
+        self.top.withdraw() # <--- СКРЫВАЕМ ОКНО ДО ПОЛНОЙ ЗАГРУЗКИ
+        
         self.top.title("О программе")
         self.top.geometry("500x480")
         self.top.configure(bg='#2b2b2b')
         self.top.resizable(False, False)
         set_app_icon(self.top)
         
-        # Блокируем родительское окно
         self.top.grab_set()
-
-        # Центрируем окно
-        self.top.update_idletasks()
-        x = (self.top.winfo_screenwidth() // 2) - (500 // 2)
-        y = (self.top.winfo_screenheight() // 2) - (480 // 2)
-        self.top.geometry(f'+{x}+{y}')
 
         # Заголовок
         tk.Label(self.top, text="Ежемесячные отчёты", bg='#2b2b2b', fg='#ffffff', 
@@ -30,7 +25,7 @@ class AboutWindow:
         tk.Label(self.top, text=f"Версия {VERSION}", bg='#2b2b2b', fg='#888888', 
                  font=('Segoe UI', 10)).pack(pady=(0, 15))
 
-        # Контейнер для кнопок (внизу) - ВАЖНО: пакуем его ДО текстового поля
+        # Контейнер для кнопок (внизу)
         btn_frame = ttk.Frame(self.top, style='TFrame')
         btn_frame.pack(fill=tk.X, side=tk.BOTTOM, padx=20, pady=(10, 20))
         
@@ -43,7 +38,7 @@ class AboutWindow:
         close_btn = ttk.Button(btn_frame, text="Закрыть", style='Action.TButton', command=self.top.destroy)
         close_btn.grid(row=0, column=1, padx=(5, 0), sticky="ew", ipady=2)
 
-        # Текстовое поле для описания - пакуем ПОСЛЕ кнопок, чтобы оно заняло остаток
+        # Текстовое поле для описания
         text_frame = tk.Frame(self.top, bg='#2b2b2b')
         text_frame.pack(fill=tk.BOTH, expand=True, padx=30)
 
@@ -51,11 +46,9 @@ class AboutWindow:
                        bd=0, highlightthickness=0, wrap=tk.WORD)
         text.pack(fill=tk.BOTH, expand=True)
 
-        # Настройка цветовых тегов
         text.tag_configure("category", foreground="#00ff88", font=('Segoe UI', 11, 'bold'))
         text.tag_configure("desc", foreground="#dddddd")
 
-        # Заполнение текста
         text.insert(tk.END, "Назначение:\n", "category")
         text.insert(tk.END, "Программа предназначена для ведения, учета и анализа ежемесячных отчётов по потреблению электроэнергии, воды и газа.\n\n", "desc")
         
@@ -74,7 +67,15 @@ class AboutWindow:
         text.insert(tk.END, "Разработчик: Ильенков С.М.\n", "desc")
         text.insert(tk.END, "Организация: ОАО \"Компания МогНат\"\n", "desc")
         
-        text.config(state=tk.DISABLED) # Только для чтения
+        text.config(state=tk.DISABLED)
+
+        # Центрируем окно перед показом
+        self.top.update_idletasks()
+        x = (self.top.winfo_screenwidth() // 2) - (500 // 2)
+        y = (self.top.winfo_screenheight() // 2) - (480 // 2)
+        self.top.geometry(f'+{x}+{y}')
+        
+        self.top.deiconify() # <--- ПОКАЗЫВАЕМ ОКНО
 
     def open_repo(self):
         webbrowser.open("https://github.com/Londimain/Energy-Service")

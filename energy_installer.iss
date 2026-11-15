@@ -2,7 +2,7 @@
 ; Создан для сборки, выполненной через PyInstaller (файл EnergyReport.exe в папке dist)
 
 #define MyAppName "Energy Report"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "ОАО ""Компания МогНат"""
 #define MyAppExeName "EnergyReport.exe"
 #define MyAppURL "https://github.com/Londimain/Energy-Service"

@@ -18,7 +18,6 @@ from settings import SettingsWindow
 from about import AboutWindow
 
 
-# Класс для кастомного окна подтверждения выхода
 class ExitDialog:
     def __init__(self, parent):
         self.top = tk.Toplevel(parent)
@@ -30,7 +29,6 @@ class ExitDialog:
         self.top.grab_set()
         self.result = False
         
-        # Центрируем окно
         self.top.update_idletasks()
         x = (self.top.winfo_screenwidth() // 2) - (380 // 2)
         y = (self.top.winfo_screenheight() // 2) - (150 // 2)
@@ -69,6 +67,9 @@ class EnergyApp(ElectricityPageMixin, WaterPageMixin, GasPageMixin):
 
         self.screen_width = self.root.winfo_screenwidth()
         self.screen_height = self.root.winfo_screenheight()
+
+        # Устанавливаем минимальный размер окна, чтобы кнопки и заголовок не наезжали
+        self.root.minsize(1024, 600)
 
         if self.screen_width < 1024:
             window_width = self.screen_width - 20
@@ -120,24 +121,11 @@ class EnergyApp(ElectricityPageMixin, WaterPageMixin, GasPageMixin):
     def create_navigation(self):
         nav_frame = ttk.Frame(self.main_container, style='TFrame')
         nav_frame.pack(fill=tk.X, padx=3, pady=(15, 5))
-        nav_frame.columnconfigure(0, weight=1)
-        nav_frame.columnconfigure(1, weight=0)
 
-        title_font_size = 14 if self.screen_width < 1024 else 16
-
-        flash_icon = self.icons.get('flash')
-        if flash_icon:
-            title = ttk.Label(nav_frame, text=" ЭНЕРГОСЛУЖБА", image=flash_icon, compound=tk.LEFT, font=('Segoe UI', title_font_size, 'bold'))
-        else:
-            title = ttk.Label(nav_frame, text="⚡ ЭНЕРГОСЛУЖБА", font=('Segoe UI', title_font_size, 'bold'))
-
-        title.grid(row=0, column=0, padx=(40, 0), pady=5, sticky='w')
-
+        # --- 1. СНАЧАЛА ПАКУЕМ КНОПКИ СПРАВА ---
+        # Это зарезервирует их ширину, и заголовок не сможет их сдвинуть
         btn_frame = ttk.Frame(nav_frame, style='TFrame')
-        btn_frame.grid(row=0, column=1, padx=(0, 20), pady=5, sticky='e')
-
-        for i in range(5):
-            btn_frame.columnconfigure(i, weight=1, uniform="nav_btn")
+        btn_frame.pack(side=tk.RIGHT, padx=(10, 20), pady=5)
 
         buttons = [
             ('Электроэнергия', 'electricity', 'energy'),
@@ -148,7 +136,7 @@ class EnergyApp(ElectricityPageMixin, WaterPageMixin, GasPageMixin):
         ]
         
         self.nav_buttons = {}
-        for idx, (text, page, icon_key) in enumerate(buttons):
+        for text, page, icon_key in buttons:
             if page:
                 btn = ttk.Button(btn_frame, text=f" {text}", style='Nav.TButton', 
                                  command=lambda p=page: self.show_page(p))
@@ -161,9 +149,22 @@ class EnergyApp(ElectricityPageMixin, WaterPageMixin, GasPageMixin):
                 if self.icons.get(icon_key):
                     btn.config(image=self.icons[icon_key], compound=tk.LEFT)
             
-            btn.grid(row=0, column=idx, padx=3, sticky='ew', ipady=2)
+            # Упаковываем кнопки слева внутри правого фрейма
+            btn.pack(side=tk.LEFT, padx=3, ipady=2)
             
         self.set_active_button('electricity')
+
+        # --- 2. ТЕПЕРЬ ПАКУЕМ ЗАГОЛОВОК СЛЕВА ---
+        # Он займет всё оставшееся пространство
+        title_font_size = 14 if self.screen_width < 1024 else 16
+        flash_icon = self.icons.get('flash')
+        
+        if flash_icon:
+            title = ttk.Label(nav_frame, text=" ЭНЕРГОСЛУЖБА", image=flash_icon, compound=tk.LEFT, font=('Segoe UI', title_font_size, 'bold'))
+        else:
+            title = ttk.Label(nav_frame, text="⚡ ЭНЕРГОСЛУЖБА", font=('Segoe UI', title_font_size, 'bold'))
+
+        title.pack(side=tk.LEFT, padx=(20, 10), pady=5, fill=tk.X, expand=True)
 
     def create_status_bar(self):
         self.status_bar = ttk.Frame(self.main_container, style='TFrame')
@@ -335,7 +336,6 @@ class EnergyApp(ElectricityPageMixin, WaterPageMixin, GasPageMixin):
                     pass
 
     def on_closing(self):
-        # Вызов кастомного окна подтверждения
         dialog = ExitDialog(self.root)
         self.root.wait_window(dialog.top)
         if dialog.result:

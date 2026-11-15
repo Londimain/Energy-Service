@@ -38,13 +38,17 @@ class AuthWindow:
             self.root, 
             show='*', 
             font=('Segoe UI', 12), 
-            justify='left', # <--- ИЗМЕНЕНО НА 'left'
+            justify='left',
             bg='#3c3c3c', 
             fg='#ffffff', 
             insertbackground='#ffffff'
         )
-        self.pwd_entry.pack(pady=5, padx=20, fill='x') # Добавлен padx и fill, чтобы поле выглядело аккуратно
-        self.pwd_entry.focus_set()
+        self.pwd_entry.pack(pady=5, padx=20, fill='x')
+
+        # --- ИСПРАВЛЕНИЕ ФОКУСА ---
+        # Даем окну 100 мс на отрисовку и принудительно ставим фокус на поле
+        self.root.after(100, self.pwd_entry.focus_force)
+        # ---------------------------
 
         self.pwd_entry.bind('<Return>', lambda e: self.check_password())
 
@@ -66,10 +70,10 @@ class AuthWindow:
             self.authenticated = True
             self.root.destroy()
         else:
-            # Указываем parent=self.root, чтобы messagebox унаследовал иконку
             messagebox.showerror("Ошибка", "Неверный пароль!", parent=self.root)
             self.pwd_entry.delete(0, tk.END)
-            self.pwd_entry.focus_set()
+            # Возвращаем фокус обратно в поле после ошибки
+            self.pwd_entry.focus_force()
 
     def on_close(self):
         self.authenticated = False

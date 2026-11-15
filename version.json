@@ -1,5 +1,5 @@
 {
-    "latest_version": "1.0.0",
-    "download_url": "EnergyReport_Setup_v1.0.0.exe",
+    "latest_version": "1.0.1",
+    "download_url": "EnergyReport_Setup_v1.0.1.exe",
     "release_notes": "- Первоначальный релиз программы\n- Учет электроэнергии, воды и газа\n- Поддержка локальной и сетевой базы данных"
 }
